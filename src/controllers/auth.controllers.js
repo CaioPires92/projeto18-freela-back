@@ -1,13 +1,17 @@
 import { v4 as uuid } from 'uuid'
 import bcrypt from 'bcrypt'
-import { db } from '../database/db.connection.js'
+import {
+  createUserDB,
+  getUserByEmailDB
+} from '../repositories/user.repository.js'
+import { createSessionDB } from '../repositories/auth.repository.js'
 
 // cadastro
 export async function signUp(req, res) {
   const { name, email, password, city, phone } = req.body
 
   try {
-    const user = await db.query(`SELECT * FROM users WHERE email = $1`, [email])
+    const user = await getUserByEmailDB(email)
 
     if (user.rowCount !== 0)
       return res.status(409).send({
@@ -16,10 +20,7 @@ export async function signUp(req, res) {
 
     const hash = bcrypt.hashSync(password, 10)
 
-    await db.query(
-      'INSERT INTO users (name, email, password, city, phone) VALUES ($1,$2, $3, $4, $5 );',
-      [name, email, hash, city, phone]
-    )
+    await createUserDB(name, email, hash, city, phone)
 
     res.sendStatus(201)
   } catch (err) {
@@ -32,7 +33,7 @@ export async function signIn(req, res) {
   const { email, password } = req.body
 
   try {
-    const user = await db.query(`SELECT * FROM users WHERE email=$1`, [email])
+    const user = await getUserByEmailDB(email)
 
     if (user.rowCount === 0) {
       return res.status(401).send({ message: 'Email não cadastrado!' })
@@ -47,10 +48,7 @@ export async function signIn(req, res) {
       return res.status(401).send({ message: 'Senha incorreta' })
 
     const token = uuid()
-    await db.query(`INSERT INTO sessions (user_id, token) VALUES ($1, $2)`, [
-      user.rows[0].id,
-      token
-    ])
+    await createSessionDB(user.rows[0].id, token)
 
     res.send({ token })
   } catch (err) {
