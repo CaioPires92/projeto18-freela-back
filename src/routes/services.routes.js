@@ -8,12 +8,24 @@ import {
 import { validateSchema } from '../middlewares/validateSchema.js'
 import { serviceSchema } from '../schemas/services.schemas.js'
 import { validateAuth } from '../middlewares/validateAuth.js'
+import { updateServiceSchema } from '../schemas/updateServices.schemas.js'
 
 const servicesRouter = Router()
 
-servicesRouter.post('/services', validateSchema(serviceSchema), validateAuth, createServices)
+servicesRouter.post(
+  '/services',
+  validateSchema(serviceSchema),
+  validateAuth,
+  createServices
+)
+servicesRouter.put(
+  '/services/:id',
+  validateSchema(updateServiceSchema),
+  validateAuth,
+  editServices
+)
 servicesRouter.get('/services', getServices)
-servicesRouter.delete('/services/:serviceId', validateAuth, deleteServices)
+servicesRouter.delete('/services/:id', validateAuth, deleteServices)
 
 export default servicesRouter
 

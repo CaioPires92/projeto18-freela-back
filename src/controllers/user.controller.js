@@ -15,6 +15,7 @@ export async function getUser(req, res) {
     res.status(500).send(err.message)
   }
 }
+
 export async function getUserById(req, res) {
   const { id } = req.params
   try {
