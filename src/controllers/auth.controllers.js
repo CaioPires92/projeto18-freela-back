@@ -50,7 +50,12 @@ export async function signIn(req, res) {
     const token = uuid()
     await createSessionDB(user.rows[0].id, token)
 
-    res.send({ token })
+    const responseData = {
+      token,
+      username: user.rows[0].name
+    }
+
+    res.send(responseData)
   } catch (err) {
     res.status(500).send(err.message)
   }
