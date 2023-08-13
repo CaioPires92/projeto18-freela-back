@@ -52,7 +52,8 @@ export async function signIn(req, res) {
 
     const responseData = {
       token,
-      username: user.rows[0].name
+      username: user.rows[0].name,
+      id: user.rows[0].id
     }
 
     res.send(responseData)
