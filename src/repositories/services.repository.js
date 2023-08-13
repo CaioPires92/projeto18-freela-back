@@ -46,7 +46,7 @@ export function updateService(updates, id) {
 
 export function getServicesAndCategory() {
   return db.query(`
-  SELECT title, description, photo_url, price, categories.name AS category
+  SELECT id, title, description, photo_url, price, categories.name AS category
   FROM services 
   INNER JOIN categories ON services.category_id = categories.category_id`)
 }
