@@ -4,7 +4,9 @@ export async function getUser(req, res) {
   // const { userId } = res.locals
 
   try {
-    const user = await db.query(`SELECT name, email, city, phone FROM users`)
+    const user = await db.query(
+      `SELECT id, name, email, city, phone FROM users`
+    )
 
     if (user.rowCount === 0) {
       return res.status(401).send({ message: 'Nenhum usuario cadastrado' })

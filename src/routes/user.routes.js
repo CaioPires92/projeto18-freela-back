@@ -10,8 +10,13 @@ import { validateAuth } from '../middlewares/validateAuth.js'
 
 const userRouter = Router()
 
-userRouter.get('/user', validateAuth, getUser)
+userRouter.get('/user', getUser)
 userRouter.get('/user/:id', validateAuth, getUserById)
-userRouter.put('/user/:id', validateSchema(updateUserSchema), validateAuth, updateUser)
+userRouter.put(
+  '/user/:id',
+  validateSchema(updateUserSchema),
+  validateAuth,
+  updateUser
+)
 
 export default userRouter
